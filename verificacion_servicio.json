@@ -1,0 +1,144 @@
+{
+  "modelo_real_verificado": true,
+  "n_imagenes": 6,
+  "pruebas": [
+    {
+      "archivo": "Bird (103).jpg",
+      "equivalencia": true,
+      "respuesta": {
+        "inspeccion_id": "5e6d0c31-427f-4ac6-aff6-269b093b651e",
+        "fecha_utc": "2026-11-07T04:24:35.381495+00:00",
+        "modelo_version": "15d46638f814a5c8",
+        "clase": "Bird-drop",
+        "confianza": 0.9181756377220154,
+        "baja_confianza": false,
+        "revision_humana": false,
+        "probabilidades": {
+          "Bird-drop": 0.9181756377220154,
+          "Clean": 0.024883326143026352,
+          "Dusty": 0.028751365840435028,
+          "Electrical-damage": 0.000731848762370646,
+          "Physical-Damage": 0.027287298813462257,
+          "Snow-Covered": 0.00017061043763533235
+        },
+        "nota": "Puntaje softmax no calibrado; no confirma una falla eléctrica.",
+        "tiempo_servicio_ms": 83.631
+      }
+    },
+    {
+      "archivo": "Clean (102).jpg",
+      "equivalencia": true,
+      "respuesta": {
+        "inspeccion_id": "e6f203d4-53f6-43b1-8e53-4ff87ac8c8cc",
+        "fecha_utc": "2026-11-07T04:24:35.720991+00:00",
+        "modelo_version": "15d46638f814a5c8",
+        "clase": "Dusty",
+        "confianza": 0.7579174637794495,
+        "baja_confianza": false,
+        "revision_humana": false,
+        "probabilidades": {
+          "Bird-drop": 0.22783346474170685,
+          "Clean": 0.01399292703717947,
+          "Dusty": 0.7579174637794495,
+          "Electrical-damage": 7.829627429600805e-05,
+          "Physical-Damage": 2.1202209609327838e-05,
+          "Snow-Covered": 0.0001565999409649521
+        },
+        "nota": "Puntaje softmax no calibrado; no confirma una falla eléctrica.",
+        "tiempo_servicio_ms": 193.152
+      }
+    },
+    {
+      "archivo": "Dust (101).jpg",
+      "equivalencia": true,
+      "respuesta": {
+        "inspeccion_id": "1ec71e16-a7c2-4d67-9cab-b14ed027134e",
+        "fecha_utc": "2026-11-07T04:24:35.891686+00:00",
+        "modelo_version": "15d46638f814a5c8",
+        "clase": "Dusty",
+        "confianza": 0.5148773193359375,
+        "baja_confianza": true,
+        "revision_humana": true,
+        "probabilidades": {
+          "Bird-drop": 0.026565849781036377,
+          "Clean": 0.031239937990903854,
+          "Dusty": 0.5148773193359375,
+          "Electrical-damage": 0.01634066179394722,
+          "Physical-Damage": 0.05520933121442795,
+          "Snow-Covered": 0.3557669520378113
+        },
+        "nota": "Puntaje softmax no calibrado; no confirma una falla eléctrica.",
+        "tiempo_servicio_ms": 87.275
+      }
+    },
+    {
+      "archivo": "Electrical (27).jpg",
+      "equivalencia": true,
+      "respuesta": {
+        "inspeccion_id": "85ff5944-d6f5-4c6e-8825-4962e92f9853",
+        "fecha_utc": "2026-11-07T04:24:35.997737+00:00",
+        "modelo_version": "15d46638f814a5c8",
+        "clase": "Electrical-damage",
+        "confianza": 0.969082772731781,
+        "baja_confianza": false,
+        "revision_humana": true,
+        "probabilidades": {
+          "Bird-drop": 0.0002977615222334862,
+          "Clean": 0.019085144624114037,
+          "Dusty": 3.302972618257627e-05,
+          "Electrical-damage": 0.969082772731781,
+          "Physical-Damage": 0.01146301906555891,
+          "Snow-Covered": 3.829221168416552e-05
+        },
+        "nota": "Puntaje softmax no calibrado; no confirma una falla eléctrica.",
+        "tiempo_servicio_ms": 49.572
+      }
+    },
+    {
+      "archivo": "Physical (16).jpg",
+      "equivalencia": true,
+      "respuesta": {
+        "inspeccion_id": "a9e1b48f-2ff2-4e2f-9b45-89af28508f51",
+        "fecha_utc": "2026-11-07T04:24:36.365727+00:00",
+        "modelo_version": "15d46638f814a5c8",
+        "clase": "Physical-Damage",
+        "confianza": 0.7422588467597961,
+        "baja_confianza": false,
+        "revision_humana": true,
+        "probabilidades": {
+          "Bird-drop": 0.10283096134662628,
+          "Clean": 9.736553329275921e-05,
+          "Dusty": 0.000756844412535429,
+          "Electrical-damage": 0.0089500080794096,
+          "Physical-Damage": 0.7422588467597961,
+          "Snow-Covered": 0.1451059728860855
+        },
+        "nota": "Puntaje softmax no calibrado; no confirma una falla eléctrica.",
+        "tiempo_servicio_ms": 215.29
+      }
+    },
+    {
+      "archivo": "Snow (107).jpg",
+      "equivalencia": true,
+      "respuesta": {
+        "inspeccion_id": "4f3f063d-8064-4f35-8d25-b258d4256b7a",
+        "fecha_utc": "2026-11-07T04:24:36.473665+00:00",
+        "modelo_version": "15d46638f814a5c8",
+        "clase": "Snow-Covered",
+        "confianza": 0.999942421913147,
+        "baja_confianza": false,
+        "revision_humana": false,
+        "probabilidades": {
+          "Bird-drop": 2.818259190462413e-07,
+          "Clean": 2.7267089627858176e-11,
+          "Dusty": 7.463759743586706e-07,
+          "Electrical-damage": 6.307603257482697e-07,
+          "Physical-Damage": 5.587550549535081e-05,
+          "Snow-Covered": 0.999942421913147
+        },
+        "nota": "Puntaje softmax no calibrado; no confirma una falla eléctrica.",
+        "tiempo_servicio_ms": 51.367
+      }
+    }
+  ]
+}

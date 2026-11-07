@@ -1,0 +1,161 @@
+{
+  "arquitectura": "efficientnet_b0",
+  "clases": [
+    "Bird-drop",
+    "Clean",
+    "Dusty",
+    "Electrical-damage",
+    "Physical-Damage",
+    "Snow-Covered"
+  ],
+  "tam": 224,
+  "media": [
+    0.485,
+    0.456,
+    0.406
+  ],
+  "desv": [
+    0.229,
+    0.224,
+    0.225
+  ],
+  "clase_a_id": {
+    "Bird-drop": 0,
+    "Clean": 1,
+    "Dusty": 2,
+    "Electrical-damage": 3,
+    "Physical-Damage": 4,
+    "Snow-Covered": 5
+  },
+  "umbral_revision": 0.7,
+  "confianza_calibrada": false,
+  "preprocesamiento": "EXIF -> RGB -> ImageOps.pad bilinear gris 128 -> tensor -> Normalize",
+  "dataset": "pythonafroz/solar-panel-images",
+  "data_root": "/kaggle/input/solar-panel-images",
+  "semilla": 42,
+  "mejor_epoca": 9,
+  "metricas_validacion": {
+    "accuracy": 0.7796610169491526,
+    "accuracy_balanceada": 0.793778783655169,
+    "macro_f1": 0.7924297924297924
+  },
+  "metricas_prueba": {
+    "accuracy": 0.6068376068376068,
+    "accuracy_balanceada": 0.5889007467225711,
+    "macro_f1": 0.5764965294378859
+  },
+  "matriz_confusion": [
+    [
+      12,
+      1,
+      5,
+      2,
+      1,
+      2
+    ],
+    [
+      2,
+      15,
+      6,
+      1,
+      1,
+      3
+    ],
+    [
+      1,
+      2,
+      19,
+      1,
+      1,
+      3
+    ],
+    [
+      1,
+      0,
+      0,
+      8,
+      3,
+      1
+    ],
+    [
+      2,
+      0,
+      1,
+      2,
+      3,
+      1
+    ],
+    [
+      1,
+      0,
+      1,
+      0,
+      1,
+      14
+    ]
+  ],
+  "comparacion_prueba": {
+    "EfficientNet-B0": {
+      "accuracy": 0.6068376068376068,
+      "accuracy_balanceada": 0.5889007467225711,
+      "macro_f1": 0.5764965294378859
+    },
+    "Reglas simples": {
+      "accuracy": 0.4188034188034188,
+      "accuracy_balanceada": 0.44299808366304533,
+      "macro_f1": 0.382300554442395
+    }
+  },
+  "seleccion_validacion": {
+    "criterio": "macro_f1_validacion",
+    "metodo_preferido": "EfficientNet-B0",
+    "epoca_efficientnet": 9,
+    "profundidad_reglas": 3,
+    "umbral_revision": 0.7,
+    "costo_20_a_1": false,
+    "nota": "Se exporta EfficientNet como candidato; la selección por validación queda registrada aparte."
+  },
+  "evaluacion_operacional": {
+    "EfficientNet-B0": {
+      "n_prueba": 117,
+      "errores_clase": 46,
+      "errores_accion": 35,
+      "danos_reales": 22,
+      "dano_predicho_clean": 0,
+      "dano_sin_recomendar_tecnico": 6,
+      "dano_sin_derivacion_humana": 2,
+      "errores_alta_confianza": 25,
+      "derivaciones_revision_humana": 48,
+      "proporcion_revision": 0.41025641025641024,
+      "n_sin_revision": 69,
+      "accuracy_sin_revision": 0.6956521739130435
+    },
+    "Reglas simples": {
+      "n_prueba": 117,
+      "errores_clase": 68,
+      "errores_accion": 54,
+      "danos_reales": 22,
+      "dano_predicho_clean": 0,
+      "dano_sin_recomendar_tecnico": 9,
+      "dano_sin_derivacion_humana": 0,
+      "errores_alta_confianza": 0,
+      "derivaciones_revision_humana": 111,
+      "proporcion_revision": 0.9487179487179487,
+      "n_sin_revision": 6,
+      "accuracy_sin_revision": 1.0
+    }
+  },
+  "versiones": {
+    "torch": "2.14.1+cu130",
+    "torchvision": "0.29.1+cu130",
+    "timm": "1.0.31",
+    "numpy": "2.4.6",
+    "pandas": "2.2.3",
+    "Pillow": "11.3.0",
+    "scipy": "1.16.3",
+    "scikit-learn": "1.6.1",
+    "kagglehub": "1.0.3"
+  },
+  "limite": "Evaluación interna; pHash no garantiza independencia por planta/panel.",
+  "politica_revision": "Baja confianza o clase Electrical-damage/Physical-Damage requiere revisión humana."
+}

@@ -1,0 +1,20 @@
+SolarScan — interfaz en español
+
+ACTUALIZAR SIN REINSTALAR
+1. Detener la ventana del servicio anterior con Ctrl+C.
+2. Descomprimir este ZIP.
+3. Copiar el CONTENIDO de SolarScan_Inicio sobre la carpeta anterior, donde están INICIAR_SOLARSCAN.bat y .venv. Aceptar reemplazar los archivos existentes; conservar .venv.
+4. Abrir INICIAR_SOLARSCAN.bat.
+5. Entrar en http://127.0.0.1:8000/ (sin /docs). Si es necesario, pulsar Ctrl+F5.
+
+La página tiene Acerca de, Ejemplos y Analizar imagen. Muestra vista previa, resultados traducidos, revisión humana y descarga de un informe de texto. Las láminas de Ejemplos proceden del ZIP de entrenamiento, archivos datos/contacto_*.jpg, y son referencia del dataset, no evaluaciones nuevas. No deben enviarse como si fueran una fotografía individual.
+
+El modelo, su configuración, la inferencia y la API original conservan sus bytes originales. Se añade interfaz_solar.py para servir la página en español; /predict y /health mantienen su contrato. No se reentrena ni se descarga el dataset.
+
+n8n sigue pendiente de la dirección accesible del servicio y de las conexiones a los canales. Esta actualización no activa ni publica el flujo. La página funciona localmente y no envía mensajes.
+
+PRIMERA INSTALACIÓN
+Se requiere Python 3.12 y acceso a Internet para instalar requirements.txt. Ejecutar el BAT y mantener la ventana abierta. Si se instala en otra carpeta, se crea otro entorno y se reinstalan las dependencias.
+
+VALIDACIÓN
+Se verificó la integridad de los archivos originales y la sintaxis de Python y JavaScript. Las pruebas de lógica de interfaz utilizan un DOM y respuestas simuladas para comprobar navegación, carga, errores y presentación de resultados; no acreditan precisión del modelo ni sustituyen una prueba de inferencia real en tu Windows. No se pudo ejecutar una revisión visual en navegador en este entorno.

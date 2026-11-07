@@ -1,0 +1,11 @@
+{
+  "README.md": "97db230f318dbc440cad1993ab2fadcdb978e37250a7a06a2921a89c41b77204",
+  "api_solar.py": "ee1182eb389aaec2657454dd760155a30731181574f7a76150b804e585a2468c",
+  "entorno_exportacion.json": "b6bb2ad54617a8b6c38f8aa4447857bf9d44be760f4c494ea8e9189ca3e7a235",
+  "inferencia_solar.py": "3e68669d91c1bd08f6ffc71a298c035ce6647e12ea4854d62c766f00e3c18e21",
+  "modelo/config.json": "267cd89861751b94aad0b81d3352d13e288fe1c2d870f1cafb0726912f4ade00",
+  "modelo/efficientnet_b0_solar.pt": "7917aa54e21aa849f17039d48329bba14f8fcbb1c39e3154b315770e502e3b77",
+  "requirements.txt": "4dab61651092795c3d64b2bb109223cd8d4a1592f4f18d27047dd025051e5ea1",
+  "test_api.py": "4bca964204c1e523e913e43ac587706928a291284dd7b7f5fcfd13c8629d583b",
+  "verificacion_servicio.json": "d630c2aabb3a990edcc021560244553df9502a00411bd6b3ff5f4575128cffc2"
+}
