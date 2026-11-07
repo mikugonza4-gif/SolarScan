@@ -1,4 +1,13 @@
-SolarScan — interfaz en español
+SolarScan — interfaz en español y recomendaciones de Gemini
+
+ACTUALIZAR LA PÁGINA PUBLICADA EN RENDER
+1. Descomprime SolarScan_Gemini_Actualizacion.zip.
+2. En GitHub, repositorio SolarScan, rama main, actualiza todos los archivos que vienen en el ZIP, manteniendo la carpeta interfaz y las rutas. No subas el ZIP cerrado ni cambies los pesos del modelo.
+3. En el panel de Render, entra a tu servicio SolarScan > Environment > Add Environment Variable. Usa la clave GEMINI_API_KEY y pega el valor obtenido en Google AI Studio. NO publiques el valor en GitHub ni lo escribas en código.
+4. Guarda el cambio y espera a que Render muestre Live después de desplegar la nueva versión de main. Actualiza la página con Ctrl+F5.
+5. Analiza una imagen. Aparecerá la recomendación de Gemini con acción, prioridad y pasos; el informe descargable también la incluirá cuando termine de generarse.
+
+Si Gemini no responde (sin clave, cuota insuficiente o falta de disponibilidad), la clasificación del modelo continúa funcionando. Gemini recibe solo el resultado textual y no la fotografía. Se requiere siempre criterio profesional para intervenir un panel. La aplicación NO envía aún correos ni se conecta con n8n.
 
 ACTUALIZAR SIN REINSTALAR
 1. Detener la ventana del servicio anterior con Ctrl+C.
@@ -9,9 +18,9 @@ ACTUALIZAR SIN REINSTALAR
 
 La página tiene Acerca de, Ejemplos y Analizar imagen. Muestra vista previa, resultados traducidos, revisión humana y descarga de un informe de texto. Las láminas de Ejemplos proceden del ZIP de entrenamiento, archivos datos/contacto_*.jpg, y son referencia del dataset, no evaluaciones nuevas. No deben enviarse como si fueran una fotografía individual.
 
-El modelo, su configuración, la inferencia y la API original conservan sus bytes originales. Se añade interfaz_solar.py para servir la página en español; /predict y /health mantienen su contrato. No se reentrena ni se descarga el dataset.
+El modelo, su configuración y la inferencia conservan sus bytes originales. Se amplía api_solar.py con /recommend, se incorpora recomendacion_gemini.py y se modifica la interfaz en español; /predict y /health mantienen su contrato. No se reentrena ni se descarga el dataset.
 
-n8n sigue pendiente de la dirección accesible del servicio y de las conexiones a los canales. Esta actualización no activa ni publica el flujo. La página funciona localmente y no envía mensajes.
+n8n sigue pendiente de configurar el flujo y las conexiones a los canales. Esta actualización no activa las notificaciones ni envía mensajes.
 
 PRIMERA INSTALACIÓN
 Se requiere Python 3.12 y acceso a Internet para instalar requirements.txt. Ejecutar el BAT y mantener la ventana abierta. Si se instala en otra carpeta, se crea otro entorno y se reinstalan las dependencias.
