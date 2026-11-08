@@ -1,0 +1,25 @@
+name: Probar API SolarScan
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v6
+      - name: Preparar Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Instalar dependencias ligeras para pruebas
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "fastapi==0.141.1" "httpx==0.28.1" "Pillow==11.3.0" "python-multipart==0.0.33" "pytest==8.4.2"
+      - name: Ejecutar pruebas offline
+        run: python -m pytest -q

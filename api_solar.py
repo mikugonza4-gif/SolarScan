@@ -1,4 +1,4 @@
-"""Servicio local de inferencia de SolarScan; no conecta con n8n."""
+"""Servicio de inferencia SolarScan con notificación opcional a n8n."""
 import hashlib
 import io
 import logging
@@ -12,9 +12,11 @@ from collections import deque
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from pathlib import Path
+
+import httpx
 from typing import Annotated, Literal
 
-from fastapi import FastAPI, File, HTTPException, Request, UploadFile
+from fastapi import BackgroundTasks, FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from PIL import Image, UnidentifiedImageError
@@ -59,6 +61,25 @@ class SolicitudRecomendacion(BaseModel):
     clase: Literal['Bird-drop','Clean','Dusty','Electrical-damage','Physical-Damage','Snow-Covered']
     confianza: float = Field(ge=0, le=1)
     revision_humana: bool
+
+async def enviar_evento_n8n(evento: dict):
+    """Envía solo metadatos y la recomendación, nunca imágenes ni claves al cliente."""
+    url = os.environ.get('N8N_WEBHOOK_URL', '').strip()
+    token = os.environ.get('N8N_WEBHOOK_TOKEN', '').strip()
+    if not url or not token:
+        return
+    if not url.startswith('https://'):
+        logger.error('N8N_WEBHOOK_URL debe usar HTTPS.')
+        return
+    try:
+        async with httpx.AsyncClient(timeout=8.0) as client:
+            respuesta = await client.post(
+                url, json=evento, headers={'X-SolarScan-Token': token})
+            respuesta.raise_for_status()
+    except httpx.HTTPError:
+        logger.exception('No se pudo entregar la inspección %s a n8n.',
+                         evento['inspeccion_id'])
+
 
 def validar_imagen(data: bytes, max_bytes=MAX_BYTES, max_pixels=MAX_PIXELS):
     if not data:
@@ -112,6 +133,35 @@ class PredictorSolar:
                 return self.predecir(path, self.modelo, self.config, self.tf, 'cpu')
 
 def create_app(model_dir=None, predictor=None, max_bytes=MAX_BYTES, max_pixels=MAX_PIXELS):
+    # Solo una recomendación auténtica por cada predicción reciente puede generar un evento.
+    # El registro es temporal, acotado y no almacena la fotografía.
+    inspecciones_recientes = {}
+    vigencia_segundos = 30 * 60
+    max_inspecciones = 500
+
+    def recordar_inspeccion(resultado: Resultado):
+        ahora = time.monotonic()
+        vencidos = [clave for clave, (_, instante) in inspecciones_recientes.items()
+                    if ahora - instante > vigencia_segundos]
+        for clave in vencidos:
+            inspecciones_recientes.pop(clave, None)
+        if len(inspecciones_recientes) >= max_inspecciones:
+            inspecciones_recientes.pop(next(iter(inspecciones_recientes)))
+        inspecciones_recientes[resultado.inspeccion_id] = (resultado, ahora)
+
+    def consumir_inspeccion(datos: SolicitudRecomendacion):
+        registro = inspecciones_recientes.get(datos.inspeccion_id)
+        if registro is None:
+            return None
+        prediccion, instante = registro
+        if (time.monotonic() - instante > vigencia_segundos
+                or prediccion.clase != datos.clase
+                or not math.isclose(prediccion.confianza, datos.confianza, abs_tol=1e-9)
+                or prediccion.revision_humana != datos.revision_humana):
+            return None
+        inspecciones_recientes.pop(datos.inspeccion_id, None)
+        return prediccion
+
     @asynccontextmanager
     async def lifespan(app):
         app.state.predictor = None
@@ -163,16 +213,18 @@ def create_app(model_dir=None, predictor=None, max_bytes=MAX_BYTES, max_pixels=M
                 raise ValueError('Probabilidades inválidas.')
             if abs(sum(probs.values()) - 1) > 1e-4:
                 raise ValueError('Probabilidades no normalizadas.')
-            return Resultado(**result, inspeccion_id=request.state.inspeccion_id,
+            salida = Resultado(**result, inspeccion_id=request.state.inspeccion_id,
                 fecha_utc=datetime.now(timezone.utc).isoformat(), modelo_version=loaded.version,
                 tiempo_servicio_ms=round(1000*(time.perf_counter()-start), 3))
+            recordar_inspeccion(salida)
+            return salida
         except Exception:
             logger.exception('Error de inferencia. inspeccion_id=%s', request.state.inspeccion_id)
             raise HTTPException(500, 'No fue posible completar la predicción.')
 
     @app.post('/recommend')
-    async def recommend(datos: SolicitudRecomendacion):
-        """Genera explicación con Gemini; no modifica los resultados del modelo."""
+    async def recommend(datos: SolicitudRecomendacion, background_tasks: BackgroundTasks):
+        """Gemini explica la predicción; después se informa a n8n sin bloquear la UI."""
         if not os.environ.get('GEMINI_API_KEY', '').strip():
             raise HTTPException(503, 'Gemini aún no está configurado. Agrega GEMINI_API_KEY en Render.')
         if not permitir_recomendacion():
@@ -181,6 +233,13 @@ def create_app(model_dir=None, predictor=None, max_bytes=MAX_BYTES, max_pixels=M
             resultado = await consultar_gemini(datos.clase, datos.confianza, datos.revision_humana)
         except GeminiNoDisponible as exc:
             raise HTTPException(exc.status_code, str(exc)) from exc
+        prediccion = consumir_inspeccion(datos)
+        if prediccion is not None:
+            evento = {campo: getattr(prediccion, campo) for campo in (
+                'inspeccion_id', 'fecha_utc', 'clase', 'confianza',
+                'baja_confianza', 'revision_humana')}
+            evento['recomendacion'] = resultado
+            background_tasks.add_task(enviar_evento_n8n, evento)
         return {'inspeccion_id': datos.inspeccion_id, **resultado}
     return app
 
